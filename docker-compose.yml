@@ -1,0 +1,18 @@
+services:
+  getfishy:
+    build:
+      dockerfile: Dockerfile
+      target: getfishy
+    volumes:
+      - data:/assets/data
+  platter:
+    build:
+      dockerfile: Dockerfile
+      target: platter
+    volumes:
+      - data:/assets/data
+    depends_on:
+      - getfishy
+
+volumes:
+  data:

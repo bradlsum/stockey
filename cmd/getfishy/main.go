@@ -23,14 +23,15 @@ func main() {
 		panic(err)
 	}
 
+	// Marshal to struct
 	stocks := []stock.Stock{}
 	json.Unmarshal(data, &stocks)
 
+	// Write to file
 	f, err := os.Create("./assets/data/stocks.json")
 	if err != nil {
 		panic(err)
 	}
-
 	prettyD, err := json.MarshalIndent(stocks, "", "    ")
 	if err != nil {
 		panic(err)

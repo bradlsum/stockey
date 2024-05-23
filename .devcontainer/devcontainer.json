@@ -22,7 +22,8 @@
 				"christian-kohler.path-intellisense",
 				"github.vscode-github-actions",
 				"ms-vscode.makefile-tools",
-				"mhutchie.git-graph"
+				"mhutchie.git-graph",
+				"ms-azuretools.vscode-docker"
 			]
 		}
 	}
