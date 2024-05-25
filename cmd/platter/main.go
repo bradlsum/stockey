@@ -9,5 +9,6 @@ import (
 func main() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", handlers.RootHandler)
+	mux.HandleFunc("/favicon", handlers.FaviconHandler)
 	http.ListenAndServe("localhost:8081", mux)
 }

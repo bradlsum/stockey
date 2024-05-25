@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"fmt"
 	"html/template"
 	"io"
 	"net/http"
@@ -14,10 +15,13 @@ import (
 type pageData struct {
 	Stocks        []stock.Stock
 	GoogleMapsKey string
+	Title         string
 }
 
 func RootHandler(w http.ResponseWriter, r *http.Request) {
 	pageData := new(pageData)
+
+	pageData.Title = "Stockey"
 
 	// Get stock data
 	stockFile := "./assets/data/stocks.json"
@@ -56,4 +60,16 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		panic(err)
 	}
+}
+
+func FaviconHandler(w http.ResponseWriter, r *http.Request) {
+	f, err := os.Open("assets/images/fish.jpg")
+	if err != nil {
+		panic(err)
+	}
+	data, err := io.ReadAll(f)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Fprint(w, string(data))
 }
