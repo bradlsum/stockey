@@ -5,6 +5,7 @@ import (
 	"io"
 	"net/http"
 	"os"
+	"slices"
 
 	"github.com/bradlsum/stockey/internal/stock"
 )
@@ -25,7 +26,10 @@ func main() {
 
 	// Marshal to struct
 	stocks := []stock.Stock{}
+
+	// Sort data
 	json.Unmarshal(data, &stocks)
+	slices.Reverse(stocks)
 
 	// Write to file
 	f, err := os.Create("./assets/data/stocks.json")

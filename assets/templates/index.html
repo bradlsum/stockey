@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        html {
+            height: 100%;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            margin: 0;
+            padding-top: 1em;
+            padding-bottom: 1em;
+            background-color: #f3f3f3;
+            font-family: Arial, sans-serif;
+        }
+
+        #map {
+            height: 50%;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        table {
+            width: 100%;
+            max-width: 800px;
+            border-collapse: collapse;
+            margin: 15px 0;
+            font-size: 0.9em;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+        }
+
+        table thead tr {
+            background-color: #009879;
+            color: #ffffff;
+            text-align: left;
+        }
+
+        table th,
+        table td {
+            padding: 12px 15px;
+        }
+
+        table tbody tr {
+            border-bottom: 1px solid #dddddd;
+        }
+
+        table tbody tr:nth-of-type(even) {
+            background-color: #f3f3f3;
+        }
+
+        table tbody tr:last-of-type {
+            border-bottom: 2px solid #009879;
+        }
+    </style>
+    <script>
+        var current_page = 1;
+        var records_per_page = 15;
+        var objJson = {{ .Stocks }};
+
+        function numPages() {
+            return Math.ceil(objJson.length / records_per_page);
+        }
+
+        function prevPage() {
+            if (current_page > 1) {
+                current_page--;
+                changePage(current_page);
+            }
+        }
+
+        function nextPage() {
+            if (current_page < numPages()) {
+                current_page++;
+                changePage(current_page);
+            }
+        }
+
+        function changePage(page) {
+            var btn_next = document.getElementById("btn_next");
+            var btn_prev = document.getElementById("btn_prev");
+            var listing_table = document.getElementById("myTable");
+            var page_span = document.getElementById("page");
+
+            if (page < 1) page = 1;
+            if (page > numPages()) page = numPages();
+
+            // <th>Stocking ID</th>
+            // <th>Water ID</th>
+            listing_table.innerHTML = `
+                <tr>
+                    <th>Body of water</th>
+                    <th>Region</th>
+                    <th>Report date</th>
+                </tr>
+            `;
+
+            var newPage = "";
+            var offset = 0;
+            if (page != 1) {
+                offset = ((page - 1) * records_per_page);
+            }
+            for (var i = 0; i < records_per_page; i++) {
+                var index = offset + i;
+                newPage += "<tr>";
+                // newPage += "<td>" + objJson[index].stocking_id + "</td>";
+                // newPage += "<td>" + objJson[index].water_id + "</td>";
+                newPage += "<td>" + objJson[index].body_of_water + "</td>";
+                newPage += "<td>" + objJson[index].region + "</td>";
+                newPage += "<td>" + objJson[index].report_date + "</td>";
+                newPage += "</tr>";
+            }
+            console.log
+
+            listing_table.innerHTML = newPage
+
+            page_span.innerHTML = page + "/" + numPages();
+
+            if (page == 1) {
+                btn_prev.style.visibility = "hidden";
+            } else {
+                btn_prev.style.visibility = "visible";
+            }
+
+            if (page == numPages()) {
+                btn_next.style.visibility = "hidden";
+            } else {
+                btn_next.style.visibility = "visible";
+            }
+        }
+
+        function initMap() {
+            var map = new google.maps.Map(document.getElementById('map'), {
+                zoom: 10,
+                center: { lat: 39.73915000, lng: -104.98470000 }  // Default location
+            });
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var pos = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+                    map.setCenter(pos);
+                }, function () {
+                    handleLocationError(true, map.getCenter());
+                });
+            } else {
+                // Browser doesn't support Geolocation
+                handleLocationError(false, map.getCenter());
+            }
+        }
+
+        function handleLocationError(browserHasGeolocation, pos) {
+            console.log(browserHasGeolocation ?
+                'Error: The Geolocation service failed.' :
+                'Error: Your browser doesn\'t support geolocation.');
+        }
+
+        window.onload = function () {
+            changePage(1);
+        }; 
+    </script>
+    <script async defer
+        src="https://maps.googleapis.com/maps/api/js?key={{ .GoogleMapsKey }}&callback=initMap"></script>
+</head>
+
+<body>
+    <div id="map"></div>
+    <table id="myTable"></table>
+    <div id="buttons">
+        <input type="button" value="Prev" id="btn_prev" onclick="prevPage()">
+        <input type="button" value="Next" id="btn_next" onclick="nextPage()">
+        <span id="page"></span>
+    </div>
+</body>
+
+</html>
