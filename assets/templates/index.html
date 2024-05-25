@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <style>
         html {
-            height: 100%;
+            height: auto;
         }
 
         body {
@@ -28,7 +28,7 @@
             width: 100%;
             max-width: 800px;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
-            minheight: 800px;
+            min-height: 400px;
             max-height: 800px;
         }
 
@@ -68,7 +68,7 @@
     </style>
     <script>
         var current_page = 1;
-        var records_per_page = 15;
+        var records_per_page = 25;
         var objJson = {{ .Stocks }};
 
         function numPages() {
@@ -184,8 +184,8 @@
     <table id="myTable"></table>
     <div id="buttons">
         <input type="button" value="Prev" id="btn_prev" onclick="prevPage()">
-        <input type="button" value="Next" id="btn_next" onclick="nextPage()">
         <span id="page"></span>
+        <input type="button" value="Next" id="btn_next" onclick="nextPage()">
     </div>
 </body>
 
