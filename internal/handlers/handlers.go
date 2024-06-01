@@ -63,7 +63,7 @@ func RootHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func FaviconHandler(w http.ResponseWriter, r *http.Request) {
-	f, err := os.Open("assets/images/fish.jpg")
+	f, err := os.Open("assets/images/fish2.png")
 	if err != nil {
 		panic(err)
 	}

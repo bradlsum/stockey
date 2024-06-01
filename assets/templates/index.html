@@ -30,12 +30,14 @@
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
             min-height: 400px;
             max-height: 800px;
+            border-radius: 10px;
         }
 
         table {
             width: 100%;
             max-width: 800px;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-radius: 10px;
             margin: 15px 0;
             font-size: 0.9em;
             box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
@@ -44,26 +46,27 @@
         }
 
         table thead tr {
-            background-color: #009879;
-            color: #ffffff;
+            color: whitesmoke;
             text-align: left;
         }
 
         table th,
         table td {
             padding: 12px 15px;
+            border: none;
         }
 
-        table tbody tr {
-            border-bottom: 1px solid #dddddd;
+        tr:nth-of-type(even) {
+            background-color: white;
         }
 
-        table tbody tr:nth-of-type(even) {
-            background-color: #f3f3f3;
-        }
-
-        table tbody tr:last-of-type {
-            border-bottom: 2px solid #009879;
+        button {
+            border: solid;
+            border-radius: 10px;
+            border-color: palevioletred;
+            color: palevioletred;
+            background-color: whitesmoke;
+            padding: 10px;
         }
     </style>
     <script>
@@ -99,8 +102,6 @@
             if (page > numPages()) page = numPages();
 
             var newPage = "";
-            // <th>Stocking ID</th>
-            // <th>Water ID</th>
             newPage = `
                 <tr>
                     <th>Body of water</th>
@@ -116,8 +117,6 @@
             for (var i = 0; i < records_per_page; i++) {
                 var index = offset + i;
                 newPage += "<tr>";
-                // newPage += "<td>" + objJson[index].stocking_id + "</td>";
-                // newPage += "<td>" + objJson[index].water_id + "</td>";
                 newPage += "<td>" + objJson[index].body_of_water + "</td>";
                 newPage += "<td>" + objJson[index].region + "</td>";
                 newPage += "<td>" + objJson[index].report_date + "</td>";
@@ -146,23 +145,23 @@
             var map = new google.maps.Map(document.getElementById('map'), {
                 zoom: 10,
                 center: { lat: 39.73915000, lng: -104.98470000 },  // Default location
-                mapTypeId: 'hybrid',
+                // mapTypeId: 'hybrid',
                 loading: 'async'
             });
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var pos = {
-                        lat: position.coords.latitude,
-                        lng: position.coords.longitude
-                    };
-                    map.setCenter(pos);
-                }, function () {
-                    handleLocationError(true, map.getCenter());
-                });
-            } else {
-                // Browser doesn't support Geolocation
-                handleLocationError(false, map.getCenter());
-            }
+            // if (navigator.geolocation) {
+            //     navigator.geolocation.getCurrentPosition(function (position) {
+            //         var pos = {
+            //             lat: position.coords.latitude,
+            //             lng: position.coords.longitude
+            //         };
+            //         map.setCenter(pos);
+            //     }, function () {
+            //         handleLocationError(true, map.getCenter());
+            //     });
+            // } else {
+            //     // Browser doesn't support Geolocation
+            //     handleLocationError(false, map.getCenter());
+            // }
         }
 
         function handleLocationError(browserHasGeolocation, pos) {
@@ -180,12 +179,17 @@
 </head>
 
 <body>
+    <div style="height: 75px; padding: 5px;">
+        <h1 style="float: left;">Stockey</h1>
+        <img src="http://localhost:8081/favicon" style="height: 75px; float: right;">
+    </div>
+
     <div id="map"></div>
     <table id="myTable"></table>
     <div id="buttons">
-        <input type="button" value="Prev" id="btn_prev" onclick="prevPage()">
+        <button id="btn_prev" onclick="prevPage()">Prev</button>
         <span id="page"></span>
-        <input type="button" value="Next" id="btn_next" onclick="nextPage()">
+        <button value="Next" id="btn_next" onclick="nextPage()">Next</button>
     </div>
 </body>
 
